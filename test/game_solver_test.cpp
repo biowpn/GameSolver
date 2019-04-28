@@ -26,11 +26,12 @@ int main()
 	game.get_value(true);
 	game.get_value(false);
 	
+	int strat_size;
 	double* optimal_strat;
 	
-	game.get_solution(true, optimal_strat);
+	game.get_solution(true, optimal_strat, strat_size);
 	std::cout << "Player I: " << std::endl;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < strat_size; ++i)
 	{
 		std::cout << i << ":" << optimal_strat[i] << std::endl;
 	}
@@ -38,8 +39,8 @@ int main()
 	delete[] optimal_strat;
 	
 	std::cout << "Player II: " << std::endl;
-	game.get_solution(false, optimal_strat);
-	for (int i = 0; i < 3; ++i)
+	game.get_solution(false, optimal_strat, strat_size);
+	for (int i = 0; i < strat_size; ++i)
 	{
 		std::cout << i << ":" << optimal_strat[i] << std::endl;
 	}

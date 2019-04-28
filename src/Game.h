@@ -28,7 +28,7 @@ public:
 	// Get the optimal (mixed) strategy for a player.
 	// true for Player I and false for Player II.
 	// A new dynamic array will be allocated matching the row/column size of the payoff matrix
-	void get_solution(bool, double*&);
+	void get_solution(bool, double*&, int&);
 	
 	// Get the value for a player.
 	// true for Player I and false for Player II.

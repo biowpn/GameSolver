@@ -26,11 +26,13 @@ Game::Game(double** t_A, int t_m, int t_n)
 	T[m][n] = 0;
 	
 	X = new Action[m];
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < m; ++i)
+	{
 		X[i] = Action(i, true);
 	}
 	Y = new Action[n];
-	for (int j = 0; j < n; ++j) {
+	for (int j = 0; j < n; ++j)
+	{
 		Y[j] = Action(j, false);
 	}
 	
@@ -90,7 +92,8 @@ void Game::solve()
 			break;
 		}
 		ratio = 0;
-		for (i = 0; i < m; ++i) {
+		for (i = 0; i < m; ++i)
+		{
 			if (T[i][q] > EPSILON)
 			{
 				if (T[i][n] < 0)
@@ -107,34 +110,44 @@ void Game::solve()
 		}
 
 		// 2. Pivoting
-		for (i = 0; i < p; ++i) {
-			for (j = 0; j < q; ++j) {
+		for (i = 0; i < p; ++i)
+		{
+			for (j = 0; j < q; ++j)
+			{
 				T[i][j] -= T[p][j] * T[i][q] / T[p][q];
 			}
-			for (j = q + 1; j < n + 1; ++j) {
+			for (j = q + 1; j < n + 1; ++j)
+			{
 				T[i][j] -= T[p][j] * T[i][q] / T[p][q];
 			}
 		}
-		for (i = p + 1; i < m + 1; ++i) {
-			for (j = 0; j < q; ++j) {
+		for (i = p + 1; i < m + 1; ++i)
+		{
+			for (j = 0; j < q; ++j)
+			{
 				T[i][j] -= T[p][j] * T[i][q] / T[p][q];
 			}
-			for (j = q + 1; j < n + 1; ++j) {
+			for (j = q + 1; j < n + 1; ++j)
+			{
 				T[i][j] -= T[p][j] * T[i][q] / T[p][q];
 			}
 		}
 
-		for (i = 0; i < p; ++i) {
+		for (i = 0; i < p; ++i)
+		{
 			T[i][q] /= -T[p][q];
 		}
-		for (i = p + 1; i < m + 1; ++i) {
+		for (i = p + 1; i < m + 1; ++i)
+		{
 			T[i][q] /= -T[p][q];
 		}
 
-		for (j = 0; j < q; ++j) {
+		for (j = 0; j < q; ++j)
+		{
 			T[p][j] /= T[p][q];
 		}
-		for (j = q + 1; j < n + 1; ++j) {
+		for (j = q + 1; j < n + 1; ++j)
+		{
 			T[p][j] /= T[p][q];
 		}
 
@@ -147,10 +160,11 @@ void Game::solve()
 	}
 }
 
-void Game::get_solution(bool t_player, double*& r_weights)
+void Game::get_solution(bool t_player, double*& r_weights, int& r_size)
 {
 	if (t_player) // Player I
 	{
+		r_size = m_max;
 		r_weights = new double[m_max];
 		for (int i = 0; i < m_max; ++i)
 		{
@@ -166,6 +180,7 @@ void Game::get_solution(bool t_player, double*& r_weights)
 	}
 	else // Player II
 	{
+		r_size = n_max;
 		r_weights = new double[n_max];
 		for (int j = 0; j < n_max; ++j)
 		{
@@ -192,7 +207,8 @@ double Game::get_value(bool t_player)
 int Game::compare_rows(int r1, int r2)
 {
 	bool r1_dominated = true, r2_dominated = true;
-	for (int c = 0; c < n; ++c) {
+	for (int c = 0; c < n; ++c)
+	{
 		if (T[r1][c] > T[r2][c])
 			r1_dominated = false;
 		else if (T[r1][c] < T[r2][c])
@@ -203,10 +219,12 @@ int Game::compare_rows(int r1, int r2)
 	return r1_dominated ? -1 : 1;
 }
 
+
 int Game::compare_columns(int c1, int c2)
 {
 	bool c1_dominated = true, c2_dominated = true;
-	for (int r = 0; r < m; ++r) {
+	for (int r = 0; r < m; ++r)
+	{
 		if (T[r][c1] < T[r][c2])
 			c1_dominated = false;
 		else if (T[r][c1] > T[r][c2])
@@ -217,47 +235,62 @@ int Game::compare_columns(int c1, int c2)
 	return c1_dominated ? -1 : 1;
 }
 
+
 void Game::remove_row(int r)
 {
-	for (int i = r; i < m; ++i) {
+	for (int i = r; i < m; ++i)
+	{
 		T[i] = T[i + 1];
 	}
-	for (int i = r; i < m - 1; ++i) {
+	for (int i = r; i < m - 1; ++i)
+	{
 		X[i] = X[i + 1];
 	}
 	--m;
 }
 
+
 void Game::remove_column(int c)
 {
-	for (int i = 0; i < m + 1; i++) {
-		for (int j = c; j < n; j++) {
+	for (int i = 0; i < m + 1; i++)
+	{
+		for (int j = c; j < n; j++)
+		{
 			T[i][j] = T[i][j + 1];
 		}
 	}
-	for (int j = c; j < n - 1; j++) {
+	for (int j = c; j < n - 1; j++)
+	{
 		Y[j] = Y[j + 1];
 	}
 	--n;
 }
 
+
 bool Game::eliminate_dominated_rows()
 {
 	bool dominated = false;
 	int r1 = 0, r2 = 1, cmp;
-	while (r1 < m - 1) {
+	while (r1 < m - 1)
+	{
 		cmp = compare_rows(r1, r2);
-		if (cmp == -1) {
+		if (cmp == -1)
+		{
 			remove_row(r1);
 			r2 = r1 + 1;
 			dominated = true;
-		} else if (cmp == 1) {
+		}
+		else if (cmp == 1)
+		{
 			remove_row(r2);
 			dominated = true;
-		} else {
+		}
+		else
+		{
 			++r2;
 		}
-		if (r2 == m) {
+		if (r2 == m)
+		{
 			++r1;
 			r2 = r1 + 1;
 		}
@@ -265,23 +298,31 @@ bool Game::eliminate_dominated_rows()
 	return dominated;
 }
 
+
 bool Game::eliminate_dominated_columns()
 {
 	bool dominated = false;
 	int c1 = 0, c2 = 1, cmp;
-	while (c1 < n - 1) {
+	while (c1 < n - 1)
+	{
 		cmp = compare_columns(c1, c2);
-		if (cmp == -1) {
+		if (cmp == -1)
+		{
 			remove_column(c1);
 			c2 = c1 + 1;
 			dominated = true;
-		} else if (cmp == 1) {
+		}
+		else if (cmp == 1)
+		{
 			remove_column(c2);
 			dominated = true;
-		} else {
+		}
+		else
+		{
 			++c2;
 		}
-		if (c2 == n) {
+		if (c2 == n)
+		{
 			++c1;
 			c2 = c1 + 1;
 		}

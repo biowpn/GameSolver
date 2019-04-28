@@ -24,8 +24,9 @@ void Game_solve(void* __this__)
 	
 double* Game_get_solution(void* __this__, bool t_player)
 {
+	int r_size;
 	double* r_weights;
-	static_cast<Game*>(__this__)->get_solution(t_player, r_weights);
+	static_cast<Game*>(__this__)->get_solution(t_player, r_weights, r_size);
 	return r_weights;
 }
 
