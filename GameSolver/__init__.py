@@ -1,7 +1,13 @@
 
 from ctypes import *
+import os
+import platform
 
-lib = CDLL("game_solver.dll")
+if platform.system() == "Windows":
+    lib = CDLL(os.path.join(os.path.dirname(__file__), "GameSolver.dll"))
+else:
+    lib = CDLL(os.path.join(os.path.dirname(__file__), "libGameSolver.so"))
+    
 
 
 
