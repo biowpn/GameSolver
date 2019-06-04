@@ -28,8 +28,14 @@ void Game::init(double** t_A, int t_m, int t_n)
 		{
 			T[i][j] = t_A[i][j];
 		}
+		T[i][n] = 1;
 	}
 	T[m] = new double[n_max + 1];
+	for (int j = 0; j < n; ++j)
+	{
+		T[m][j] = -1;
+	}
+	T[m][n] = 0;
 	
 	X = new Action[m];
 	for (int i = 0; i < m; ++i)
