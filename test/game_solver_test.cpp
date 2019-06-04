@@ -23,35 +23,33 @@ int main()
 	
 	Game game(A, 3, 3);
 	game.solve();
-	game.get_value(true);
-	game.get_value(false);
 	
-	int strat_size;
-	double* optimal_strat;
 	
-	game.get_solution(true, optimal_strat, strat_size);
+	double* optimal_strat = new double[3];
+	
+	game.optstrat(true, optimal_strat);
 	std::cout << "Player I: " << std::endl;
-	for (int i = 0; i < strat_size; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		std::cout << i << ":" << optimal_strat[i] << std::endl;
 	}
-	std::cout << std::endl;
-	delete[] optimal_strat;
+	std::cout << "Value: " << game.value(true) << std::endl;
 	
 	std::cout << "Player II: " << std::endl;
-	game.get_solution(false, optimal_strat, strat_size);
-	for (int i = 0; i < strat_size; ++i)
+	game.optstrat(false, optimal_strat);
+	for (int i = 0; i < 3; ++i)
 	{
 		std::cout << i << ":" << optimal_strat[i] << std::endl;
 	}
-	std::cout << std::endl;
-	delete[] optimal_strat;
+	std::cout << "Value: " << game.value(false) << std::endl;
+	
 	
 	for (int i = 0; i < 3; ++i)
 	{
 		delete[] A[i];
 	}
 	delete[] A;
+	delete[] optimal_strat;
 	
 	return 0;
 }

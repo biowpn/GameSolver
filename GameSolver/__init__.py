@@ -19,7 +19,9 @@ class Game:
         '''
         A is the payoff matrix.
         '''
-
+        assert len(A) > 0
+        assert len(A[0]) > 0
+        
         self.m = len(A)
         self.n = len(A[0])
         rows = [(c_double * self.n)(*row) for row in A]
@@ -40,43 +42,32 @@ class Game:
         return lib.Game_solve(self.obj)
 
 
-    lib.Game_get_solution.argtypes = [c_void_p, c_bool]
-    lib.Game_get_solution.restype = POINTER(c_double)
-    lib.delete_double_array.argtypes = [c_void_p]
-    lib.delete_double_array.restype = c_void_p
-    def get_solution(self, player):
+    lib.Game_optstrat.argtypes = [c_void_p, c_bool, POINTER(c_double)]
+    lib.Game_optstrat.restype = c_void_p
+    def opstrat(self, player):
         '''
-        For Player I, player is true; for player II, player is false.
+        For Player I, player is true; for Player II, player is false.
         '''
 
-        solution = lib.Game_get_solution(self.obj, bool(player))
         size = self.m if player else self.n
-        weights = [solution[i] for i in range(size)]
-        lib.delete_double_array(solution)
-        return weights
+        weights = (c_double * size)()
+        lib.Game_optstrat(self.obj, bool(player), weights)
+        return [weights[i] for i in range(size)]
+
+    def get_solution(self, player):
+        return self.opstrat(player)
 
 
-    lib.Game_get_value.argtypes = [c_void_p, c_bool]
-    lib.Game_get_value.restype = c_double
+    lib.Game_value.argtypes = [c_void_p, c_bool]
+    lib.Game_value.restype = c_double
+    def value(self, player):
+        '''
+        For Player I, player is true; for Player II, player is false.
+        '''
+        return lib.Game_value(self.obj, bool(player))
+
     def get_value(self, player):
-        '''
-        For Player I, player is true; for player II, player is false.
-        '''
-        
-        return lib.Game_get_value(self.obj, bool(player))
-
-
-
-def test():
-    game = Game([
-        [0, -2, 1],
-        [2, 0, -1],
-        [-1, 1, 0]
-        ])
-    game.solve()
-    print(game.get_value(True))
-    print(game.get_solution(True))
-                
+        return self.value(player)
 
 
 

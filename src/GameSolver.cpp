@@ -22,27 +22,15 @@ void Game_solve(void* __this__)
 }
 
 	
-double* Game_get_solution(void* __this__, bool t_player)
+void Game_optstrat(void* __this__, bool t_player, double* r_weights)
 {
-	int r_size;
-	double* r_weights;
-	static_cast<Game*>(__this__)->get_solution(t_player, r_weights, r_size);
-	return r_weights;
+	static_cast<Game*>(__this__)->optstrat(t_player, r_weights);
 }
 
 	
-double Game_get_value(void* __this__, bool t_player)
+double Game_value(void* __this__, bool t_player)
 {
-	return static_cast<Game*>(__this__)->get_value(t_player);
-}
-
-
-void delete_double_array(double* t_arr)
-{
-	if (t_arr)
-	{
-		delete[] t_arr;
-	}
+	return static_cast<Game*>(__this__)->value(t_player);
 }
 
 

@@ -6,24 +6,30 @@ const double EPSILON = 0.000000000001;
 
 Game::Game(double** t_A, int t_m, int t_n)
 {
+	init(t_A, t_m, t_n);
+}
+
+
+Game::Game(void* t_A, int t_m, int t_n)
+{
+	init(static_cast<double**>(t_A), t_m, t_n);
+}
+
+
+void Game::init(double** t_A, int t_m, int t_n)
+{
 	m_max = m = t_m;
 	n_max = n = t_n;
-	T = new double*[m + 1];
+	T = new double*[m_max + 1];
 	for (int i = 0; i < m; ++i)
 	{
-		T[i] = new double[n + 1];
+		T[i] = new double[n_max + 1];
 		for (int j = 0; j < n; ++j)
 		{
 			T[i][j] = t_A[i][j];
 		}
-		T[i][n] = 1;
 	}
-	T[m] = new double[n + 1];
-	for (int j = 0; j < n; ++j)
-	{
-		T[m][j] = -1;
-	}
-	T[m][n] = 0;
+	T[m] = new double[n_max + 1];
 	
 	X = new Action[m];
 	for (int i = 0; i < m; ++i)
@@ -160,12 +166,11 @@ void Game::solve()
 	}
 }
 
-void Game::get_solution(bool t_player, double*& r_weights, int& r_size)
+
+void Game::optstrat(bool t_player, double* r_weights)
 {
 	if (t_player) // Player I
 	{
-		r_size = m_max;
-		r_weights = new double[m_max];
 		for (int i = 0; i < m_max; ++i)
 		{
 			r_weights[i] = 0;
@@ -180,8 +185,6 @@ void Game::get_solution(bool t_player, double*& r_weights, int& r_size)
 	}
 	else // Player II
 	{
-		r_size = n_max;
-		r_weights = new double[n_max];
 		for (int j = 0; j < n_max; ++j)
 		{
 			r_weights[j] = 0;
@@ -194,14 +197,19 @@ void Game::get_solution(bool t_player, double*& r_weights, int& r_size)
 			}
 		}
 	}
-
 }
 
-double Game::get_value(bool t_player)
+
+void Game::optstrat(bool t_player, void* r_weights)
 {
-	return t_player ? (1 / T[n][m] + value_offset) : -get_value(true);
+	optstrat(t_player, static_cast<double*>(r_weights));
 }
 
+
+double Game::value(bool t_player)
+{
+	return t_player ? (1 / T[n][m] + value_offset) : -value(true);
+}
 
 
 int Game::compare_rows(int r1, int r2)
@@ -238,6 +246,7 @@ int Game::compare_columns(int c1, int c2)
 
 void Game::remove_row(int r)
 {
+	delete T[r];
 	for (int i = r; i < m; ++i)
 	{
 		T[i] = T[i + 1];
@@ -328,6 +337,12 @@ bool Game::eliminate_dominated_columns()
 		}
 	}
 	return dominated;
+}
+
+
+void Game::print()
+{
+	
 }
 
 

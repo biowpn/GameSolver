@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="GameSolver",
-    version="0.0.1",
+    version="0.1.0",
     author="Hank Meng",
     author_email="ymenghank@gmail.com",
     description="Fast two player zero-sum game solver.",

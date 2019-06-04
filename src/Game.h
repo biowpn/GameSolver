@@ -2,6 +2,8 @@
 #ifndef _GAME_
 #define _GAME_
 
+//#include <iostream>
+
 
 struct Action {
 	int index;
@@ -20,6 +22,9 @@ class Game
 public:
 	// Passed in payoff matrix as a m by n 2D dynamic array
 	Game(double**, int, int);
+	// For wasm
+	Game(void*, int, int);
+	
 	~Game();
 	
 	// Solve the game
@@ -27,14 +32,20 @@ public:
 	
 	// Get the optimal (mixed) strategy for a player.
 	// true for Player I and false for Player II.
-	// A new dynamic array will be allocated matching the row/column size of the payoff matrix
-	void get_solution(bool, double*&, int&);
+	void optstrat(bool, double*);
+	// For wasm
+	void optstrat(bool, void*);
 	
 	// Get the value for a player.
 	// true for Player I and false for Player II.
-	double get_value(bool);
+	double value(bool);
+	
+	// Debug
+	void print();
 
 protected:
+	void init(double**, int, int);
+
 	int m; // Size of strategy space of player I. Current size of X.
 	int m_max; // Original size of X.
 	int n; // Size of strategy space of player II. Current size of Y.

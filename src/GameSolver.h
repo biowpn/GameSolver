@@ -12,11 +12,10 @@ extern "C"
 	
 	void Game_solve(void*);
 	
-	double* Game_get_solution(void*, bool);
+	void Game_optstrat(void*, bool, double*);
 	
-	double Game_get_value(void*, bool);
-	
-	void delete_double_array(double*);
+	double Game_value(void*, bool);
+
 	
 }
 
