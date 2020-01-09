@@ -38,6 +38,6 @@ print(game.get_solution(True))
 
 You can also refer to `Game.h`/`GameSolver.h` to use it with C/C++.
 
-A DLL "GameSolver.dll" has been compiled. The Python wrapper relies on it.
-The DLL is compatible for 64-bit Windows only. If you use other operating system, you need to re-compile the cpp codes.
+A DLL "libGameSolver.dll" has been compiled. The Python wrapper relies on it.
+The DLL is compatible for 64-bit Windows only. If you use other operating system, you need to re-compile the cpp codes. This project uses CMake for build system.
 

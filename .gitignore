@@ -114,4 +114,4 @@ dmypy.json
 .pyre/
 
 data/*
-test.py
+build/*
