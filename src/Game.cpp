@@ -3,24 +3,16 @@
 
 const double EPSILON = 0.000000000001;
 
-
-Game::Game(double** t_A, int t_m, int t_n)
+Game::Game(double **t_A, int t_m, int t_n)
 {
 	init(t_A, t_m, t_n);
 }
 
-
-Game::Game(void* t_A, int t_m, int t_n)
-{
-	init(static_cast<double**>(t_A), t_m, t_n);
-}
-
-
-void Game::init(double** t_A, int t_m, int t_n)
+void Game::init(double **t_A, int t_m, int t_n)
 {
 	m_max = m = t_m;
 	n_max = n = t_n;
-	T = new double*[m_max + 1];
+	T = new double *[m_max + 1];
 	for (int i = 0; i < m; ++i)
 	{
 		T[i] = new double[n_max + 1];
@@ -36,7 +28,7 @@ void Game::init(double** t_A, int t_m, int t_n)
 		T[m][j] = -1;
 	}
 	T[m][n] = 0;
-	
+
 	X = new Action[m];
 	for (int i = 0; i < m; ++i)
 	{
@@ -47,7 +39,7 @@ void Game::init(double** t_A, int t_m, int t_n)
 	{
 		Y[j] = Action(j, false);
 	}
-	
+
 	value_offset = T[0][0];
 	for (int j = 1; j < n; ++j)
 	{
@@ -66,7 +58,6 @@ void Game::init(double** t_A, int t_m, int t_n)
 	}
 }
 
-
 Game::~Game()
 {
 	for (int i = 0; i < m + 1; ++i)
@@ -74,15 +65,15 @@ Game::~Game()
 		delete[] T[i];
 	}
 	delete[] T;
-	
+
 	delete[] X;
 	delete[] Y;
 }
 
-
 void Game::solve()
 {
-	while (eliminate_dominated_rows() || eliminate_dominated_columns());
+	while (eliminate_dominated_rows() || eliminate_dominated_columns())
+		;
 
 	int i, j, p, q;
 	double ratio;
@@ -172,8 +163,7 @@ void Game::solve()
 	}
 }
 
-
-void Game::optstrat(bool t_player, double* r_weights)
+void Game::optstrat(bool t_player, double *r_weights)
 {
 	if (t_player) // Player I
 	{
@@ -205,18 +195,10 @@ void Game::optstrat(bool t_player, double* r_weights)
 	}
 }
 
-
-void Game::optstrat(bool t_player, void* r_weights)
-{
-	optstrat(t_player, static_cast<double*>(r_weights));
-}
-
-
 double Game::value(bool t_player)
 {
 	return t_player ? (1 / T[n][m] + value_offset) : -value(true);
 }
-
 
 int Game::compare_rows(int r1, int r2)
 {
@@ -233,7 +215,6 @@ int Game::compare_rows(int r1, int r2)
 	return r1_dominated ? -1 : 1;
 }
 
-
 int Game::compare_columns(int c1, int c2)
 {
 	bool c1_dominated = true, c2_dominated = true;
@@ -249,7 +230,6 @@ int Game::compare_columns(int c1, int c2)
 	return c1_dominated ? -1 : 1;
 }
 
-
 void Game::remove_row(int r)
 {
 	delete T[r];
@@ -263,7 +243,6 @@ void Game::remove_row(int r)
 	}
 	--m;
 }
-
 
 void Game::remove_column(int c)
 {
@@ -280,7 +259,6 @@ void Game::remove_column(int c)
 	}
 	--n;
 }
-
 
 bool Game::eliminate_dominated_rows()
 {
@@ -313,7 +291,6 @@ bool Game::eliminate_dominated_rows()
 	return dominated;
 }
 
-
 bool Game::eliminate_dominated_columns()
 {
 	bool dominated = false;
@@ -344,11 +321,3 @@ bool Game::eliminate_dominated_columns()
 	}
 	return dominated;
 }
-
-
-void Game::print()
-{
-	
-}
-
-
